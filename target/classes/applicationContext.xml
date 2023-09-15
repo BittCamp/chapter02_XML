@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<bean id="messageBeanImpl" class="sample01.MessageBeanImpl">
+		<constructor-arg>
+			<value>사과</value>
+		</constructor-arg>
+		<property name="cost">
+			<value>5000</value>
+		</property>
+		<property name="qty" value="3"></property>
+	</bean>
+	
+	<!--생성자 방식 -->	
+	<bean id="calcAdd" class="sample02.CalcAdd">
+		<constructor-arg value="36"/> <!-- 이렇게도 된다. -->
+		<constructor-arg>
+			<value>25</value> 
+		</constructor-arg>
+	</bean>
+	<!-- 세터방식 -->
+	<bean id="calcMul" class="sample02.CalcMul">
+		<property name="x" value="25"/>
+		<property name="y">
+			<value>36</value>
+		</property>
+	</bean>
+	<!-- sample03 빈설정-->
+	<bean id="sungJukDTO" class="sample03.SunJukDTO">
+		<property name="name" value="홍길동"/>
+		<property name="kor" value="97"/>
+		<property name="eng" value="100"/>
+		<property name="math" value="95"/>
+	</bean> 
+	
+	<bean id="sungJukImpl" class="sample03.SungJukImpl">
+		<constructor-arg ref="sungJukDTO"/>
+	</bean>
+	<!--   sample04   -->
+	
+	<!--DTO2  -->
+	<bean id="sungJukDTO2" class="sample04.SungJukDTO2" scope="prototype" /><!-- 싱글톤이면 같은것들만 출력됨.  -->
+	
+	<!-- list 전역변수선언.  -->
+	<bean id="arrayList" class="java.util.ArrayList"/><!-- 의존관계 -->
+	
+	<!-- helloSpring -->
+	<bean id="helloSpring" class="sample04.HelloSpring"/>
+	
+	<!-- Input -->
+	<bean id="sungJukInput" class="sample04.SungJukInput" scope="prototype">
+		<property name="sungJukDTO2" ref="sungJukDTO2"/><!-- property name="sungJukDTO2" 이게 세터 함수 --><!--밑에 DTO2  에 있는 아이디를 가져와서 썼다.-->
+		<property name="list" ref="arrayList"/> <!-- 최초 인풋에서 리스트에 DTO 값들을 넣어서 xml 안에있는 arrayList에 들어가있는 상태이다. -->
+	</bean>
+
+	<!-- output -->
+	<bean id="sungJukOutput" class="sample04.SungJukOutput">
+		<property name="list" ref="arrayList"/> <!-- 리스트 쓰려면 의존관계로 가져와야된다.  -->
+	</bean>	
+	
+	<!-- update -->
+	<bean id="sungJukUpdate" class="sample04.SungJukUpdate" scope="prototype" >
+		<property name="list" ref="arrayList"/> <!-- 리스트 쓰려면 의존관계로 가져와야된다.  -->
+	</bean>	
+	
+	<!-- delete -->
+	<bean id="sungJukDelete" class="sample04.SungJukDelete" scope="prototype" >
+		<property name="list" ref="arrayList"/> <!-- 리스트 쓰려면 의존관계로 가져와야된다.  -->
+	</bean>	
+	
+	<!-- sample05 -->
+	<bean id="messageBeanImpl2" class="sample05.MessageBeanImpl">
+		<constructor-arg value="홍길동"/><!-- 생성자일때  -->
+		<property name="phone" value="010-1234-5678"/> <!-- 세터일때 -->
+		<property name="outputter" ref="fileOutputter"></property><!--ref="fileOutputter" :  id가 fileOutputter 를 참조해라  -->
+	</bean>
+	
+	<bean id="fileOutputter" class="sample05.FileOutputter">
+		<property name="filePath" value="D:/Spring/"/> <!--D:\\Spring 자바에서는 두개를 써야 d드라이브경로나타냄. 허나 D:/Spring/ 이렇게도 됨  -->
+		<property name="fileName" value="result.txt"/>
+	</bean>
+	
+	
+</beans>
